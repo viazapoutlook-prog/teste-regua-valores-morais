@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Teste da Régua</title>
+<meta property="og:title" content="Teste da Régua">
+<meta property="og:description" content="A sua régua mede todo mundo do mesmo jeito? Faça o teste e descubra.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="COLE_AQUI_O_LINK_DO_SITE">
+<meta property="og:image" content="LINK_DA_IMAGEM_DE_CAPA.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{
+  --bg:#f2f4ef; --fg:#14211a; --soft:#4f5e55; --card:#ffffff; --line:#d3dbd4;
+  --green:#0e5a39; --gold:#e2b007; --wood:#d9a441; --woodmark:#5a3a0c; --red:#a8281f;
+  --display:"Barlow Condensed", "Arial Narrow", sans-serif;
+  --body:"Source Sans 3", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1511; --fg:#e7eee8; --soft:#a0b1a7; --card:#14201a; --line:#2a3a31;
+  --green:#46c184; --gold:#f0c84a; --wood:#b7832a; --woodmark:#2b1a03; --red:#ec7a70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1511; --fg:#e7eee8; --soft:#a0b1a7; --card:#14201a; --line:#2a3a31;
+  --green:#46c184; --gold:#f0c84a; --wood:#b7832a; --woodmark:#2b1a03; --red:#ec7a70; color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0}
+body{background:var(--bg);color:var(--fg);font:17px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 32px}
+main{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2{font-family:var(--display);font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:40px;letter-spacing:.2px}
+h2{font-size:30px}
+p{margin:0}
+.eyebrow{font:700 13px/1 var(--body);letter-spacing:1.4px;text-transform:uppercase;color:var(--green)}
+.soft{color:var(--soft)}
+.small{font-size:14px}
+.stack{display:flex;flex-direction:column;gap:12px}
+
+.ruler{position:relative;height:44px;border-radius:4px;background:var(--wood);overflow:hidden;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+.ruler::before{content:"";position:absolute;inset:0 0 auto 0;height:12px;
+  background:repeating-linear-gradient(90deg,var(--woodmark) 0 1px,transparent 1px 1.25%)}
+.ruler-cells{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr)}
+.ruler-cells span{border-left:2px solid var(--woodmark);display:flex;align-items:flex-end;padding:0 0 3px 4px;
+  font:700 15px/1 var(--display);color:var(--woodmark)}
+.ruler-cells span:first-child{border-left:0}
+.ruler-cells span.done{background:rgba(14,90,57,.28)}
+.ruler-cells span.now{background:rgba(255,255,255,.35)}
+.ruler-label{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.situacao{font-size:19px;line-height:1.5}
+.ask{font-weight:700;font-size:19px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:700 18px/1 var(--body);border-radius:8px;padding:16px 10px;cursor:pointer;border:2px solid var(--green);background:transparent;color:var(--fg)}
+button.primary{background:var(--green);color:var(--card);border-color:var(--green)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.linkbtn{border:0;padding:8px 0;font-size:15px;font-weight:600;color:var(--soft);text-decoration:underline;background:none}
+.verdict{display:inline-block;font:700 13px/1 var(--body);letter-spacing:1px;text-transform:uppercase;padding:6px 8px;border-radius:4px;border:1.5px solid currentColor}
+.verdict.errado{color:var(--red)} .verdict.certo{color:var(--green)}
+.reveal h2{color:var(--green)}
+.box{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:6px}
+.box b{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--soft)}
+.lado{background:color-mix(in srgb,var(--gold) 18%,transparent);border-radius:6px;padding:10px 12px}
+ul.fatos{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.fontes a{color:var(--fg)}
+.honra{font-family:var(--display);font-size:26px;font-weight:600;line-height:1.15;color:var(--green);text-wrap:balance}
+.placar{font:700 64px/1 var(--display);color:var(--green)}
+.sharebox{display:flex;flex-direction:column;gap:10px}
+.sharebox a{display:block;text-align:center;font:700 18px/1 var(--body);padding:16px;border-radius:8px;background:var(--green);color:var(--card);text-decoration:none}
+footer{font-size:13px;color:var(--soft);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+@media (prefers-reduced-motion:no-preference){.card{animation:in .25s ease-out}@keyframes in{from{transform:translateY(6px)}to{transform:none}}}
+</style>
+</head>
+<body>
+<main>
+  <audio id="bg-audio" loop>
+    <source src="WhatsApp Ptt 2026-10-23 at 12.56.33.ogg" type="audio/ogg">
+  </audio>
+
+  <div class="stack" aria-hidden="false">
+    <div class="ruler" role="progressbar" aria-valuemin="0" aria-valuemax="8" id="ruler" aria-valuenow="0">
+      <div class="ruler-cells" id="cells"></div>
+    </div>
+    <div class="ruler-label"><span id="rlabel">A régua · 8 casos</span><span>2º turno · 25/10/2026</span></div>
+  </div>
+
+  <section id="screen"></section>
+
+  <footer>
+    <p><b>Publicado por:</b> Johann Marujo · @jsmarujo. Sem vínculo com campanha. Sem impulsionamento pago.</p>
+    <p>Todos os fatos têm data e fonte. Nenhum caso descreve condenação. Onde há investigação, ela está em andamento e a versão do citado aparece em cada caso.</p>
+  </footer>
+</main>
+
+<script type="module">
+// --- INÍCIO DO FIREBASE ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBievsXwREUt_tvuIrLfubM0txGFl2FVfQ",
+  authDomain: "teste-valores-morais.firebaseapp.com",
+  projectId: "teste-valores-morais",
+  storageBucket: "teste-valores-morais.firebasestorage.app",
+  messagingSenderId: "426875423115",
+  appId: "1:426875423115:web:96f3475ec7eb21e6c8078e",
+  measurementId: "G-LR2TLG07XK"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.registrarEvento = async (tipo, erros = null) => {
+  try {
+    await addDoc(collection(db, "acessos_regua"), {
+      tipo_evento: tipo,
+      erros_placar: erros,
+      data_hora: serverTimestamp()
+    });
+  } catch (e) {
+    console.error("Falha ao registrar evento no Firebase:", e);
+  }
+};
+
+window.registrarEvento("inicio");
+// --- FIM DO FIREBASE ---
+
+const SHARE_URL = ""; 
+
+const CASOS = [
+ {valor:"Patriotismo",
+  sit:"Um governo estrangeiro anuncia tarifa de <b>50%</b> sobre tudo o que o Brasil vende para lá. Isso atinge o agro, a indústria e o emprego daqui. Poucas horas depois, um senador brasileiro posta em inglês agradecendo ao presidente desse país.",
+  ask:"O senhor acha certo?",
+  nome:"Foi o Flávio, em 9 de julho de 2025.",
+  fatos:["O post dizia “Thank you, President Trump” e saiu cerca de <b>seis horas</b> depois da carta que anunciou a tarifa de 50% sobre o Brasil."],
+  estado:"Não é caso na Justiça. É um post público, que continua no perfil dele.",
+  lado:"Ele diz que atuou contra as tarifas e, em julho de 2026, pediu a suspensão delas.",
+  fontes:[["SBT News, 29/8/2026","https://sbtnews.sbt.com.br/noticia/politica/flavio-tambem-agradeceu-a-trump-por-tarifas-em-2025"]]},
+ {valor:"O meu dinheiro",
+  sit:"Em 2021, um político financiou <b>R$ 3,1 milhões</b> para comprar uma casa de R$ 6 milhões no Lago Sul, em Brasília. O banco era público. O juro foi de <b>3,71% ao ano</b>. Ele quitou em cerca de 3 anos um financiamento de 30.",
+  ask:"Hoje, quem faz um financiamento no Brasil paga acima de 12,5% ao ano. O senhor acha justo?",
+  nome:"Foi o Flávio, no BRB, banco público do Distrito Federal.",
+  fatos:["Financiamento de R$ 3,1 milhões a 3,71% ao ano, em 2021.","Hoje, o financiamento de veículos para pessoa física custa em média 25,6% ao ano. No imóvel, de 10,26% a 11,99% ao ano mais TR."],
+  estado:"O caso está na Polícia Federal: a PF apura se o BRB mudou regras para favorecê-lo. Ele não foi indiciado.",
+  lado:"Ele diz que foi tudo legal.",
+  fontes:[["Jornal do Brasil, 2/10/2026","https://www.jb.com.br/brasil/policia/2026/10/1061098-pf-investiga-financiamento-de-mansao-de-flavio-bolsonaro-em-brasilia.html"],["Banco Central, financiamento de veículos PF","https://www.creditas.com/exponencial/taxa-de-juros-financiamento-de-veiculo/"]]},
+ {valor:"Mérito",
+  pre:"Antes: qual foi o seu primeiro emprego? Quanto tempo de ônibus, quantas horas por dia?",
+  sit:"Aos 19 anos, um rapaz do Rio ganhou um cargo de <b>40 horas por semana</b> na Câmara dos Deputados, em Brasília, de 2000 a 2002. No mesmo período ele cursava Direito e fazia estágio no Rio, a <b>mil quilômetros</b> de distância.",
+  ask:"O senhor acha certo um cargo assim, pago com imposto?",
+  nome:"Foi o Flávio, aos 19 anos, na liderança do PPB na Câmara.",
+  fatos:["Cargo de 40 horas semanais de 2000 a 2002, publicado no Diário Oficial.","No mesmo período estudava Direito e estagiava no Rio."],
+  estado:"Não é caso na Justiça. A nomeação é pública.",
+  lado:"Procurada pela BBC, a assessoria dele não comentou.",
+  fontes:[["BBC News Brasil, 23/1/2019",""],["Congresso em Foco, 24/1/2019",""]]},
+ {valor:"Farda honesta",
+  sit:"Em 2005, um deputado deu a mais alta honraria do estado a um policial militar que estava <b>preso, acusado de homicídio</b>. A medalha foi entregue dentro da cadeia. Depois, a esposa e a mãe desse policial foram contratadas no gabinete do deputado.",
+  ask:"O senhor acha certo?",
+  nome:"Foi o Flávio, que deu a Medalha Tiradentes a Adriano da Nóbrega.",
+  fatos:["A esposa de Adriano trabalhou no gabinete de 2007 a 2018; a mãe, de 2016 a 2018.","Adriano foi expulso da PM em 2014 e anos depois foi acusado de chefiar uma milícia. Morreu em 2020."],
+  estado:"Não há denúncia contra o Flávio por isso.",
+  lado:"Ele confirma a medalha e nega qualquer ligação com milícia.",
+  fontes:[["Congresso em Foco","https://www.congressoemfoco.com.br/area/governo/heroi-brilhante-as-vezes-que-bolsonaro-e-flavio-defenderam-miliciano-morto/"],["BBC News Brasil, 22/10/2026","https://www.opovo.com.br/agencia/bbc/2026/10/22/willer-tomaz-vorcaro-e-milicia-o-que-pesa-contra-flavio-bolsonaro.html"]]},
+ {valor:"Honestidade",
+  sit:"Um senador procura o dono de um banco e pede patrocínio de até <b>R$ 134 milhões</b> para um filme. Quando a conversa vem a público, primeiro ele nega. Depois admite que pediu.",
+  ask:"O senhor acha certo?",
+  nome:"Foi o Flávio, com Daniel Vorcaro, dono do Banco Master.",
+  fatos:["O pedido era para o filme Dark Horse.","Ele primeiro negou e depois confirmou que pediu “patrocínio privado”."],
+  estado:"Há inquérito no STF desde julho.",
+  lado:"Ele diz que foi patrocínio privado, que não ofereceu nada em troca e que não recebeu dinheiro.",
+  fontes:[["BBC News Brasil, 27/5/2026","https://www.opovo.com.br/agencia/bbc/2026/05/27/amp/de-baixissimo-orcamento-a-milhoes-pedidos-a-vorcaro-os-bastidores-do-filme-sobre-bolsonaro.html"],["Exame","https://exame.com/brasil/flavio-bolsonaro-admite-ter-visitado-vorcaro-apos-prisao-do-banqueiro/"],["Poder360, 19/10/2026","https://www.poder360.com.br/poder-justica/pf-envia-ao-stf-nova-investigacao-sobre-flavio-segundo-jornal/"]]},
+ {valor:"Mão limpa",
+  sit:"Uma campanha a presidente recebe, entre as maiores doações de pessoa física, o dinheiro de um empresário que admitiu à Justiça ter pago <b>R$ 1,5 milhão de propina</b> a um juiz.",
+  ask:"O senhor aceitaria esse dinheiro?",
+  nome:"Foi a campanha do Flávio, em 2026.",
+  fatos:["O doador é réu colaborador na Operação Faroeste, na Bahia.","Os dois maiores doadores pessoas físicas somam R$ 3,1 milhões."],
+  estado:"Não há acusação contra o Flávio por isso. A doação está declarada ao TSE.",
+  lado:"Doação de pessoa física é permitida por lei.",
+  fontes:[["The Intercept Brasil, 21/10/2026","https://intercept.com.br/2026/10/21/maiores-doadores-flavio-bolsonaro-denunciados-corrupcao-contrabando"],["Prestação de contas no TSE","https://divulgacandcontas.tse.jus.br/"]]},
+ {valor:"O povo julga",
+  sit:"Em 2021, uma menina de 5 anos morre com um tiro de fuzil. O Ministério Público acusa um policial militar. Um senador, <b>advogado do PM</b>, assina um recurso para que o caso não seja julgado por um júri popular.",
+  ask:"O senhor acha certo tirar do povo esse julgamento?",
+  nome:"Foi o Flávio, em 2024, no caso da menina Ana Clara.",
+  fatos:["O STJ negou o recurso.","Mais de cinco anos depois da morte, o júri ainda não aconteceu."],
+  estado:"Todo acusado tem direito a defesa. O STJ manteve o júri popular.",
+  lado:"Ele diz que a advocacia não pode ser criminalizada e que o policial ainda nem foi julgado.",
+  fontes:[["Metrópoles, out/2026","https://www.metropoles.com/brasil/flavio-ana-clara-caso-lula-pm"],["Brasil Paralelo, out/2026","https://www.brasilparalelo.com.br/noticias/o-que-foi-o-caso-ana-clara-citado-por-lula-contra-flavio"]]},
+ {valor:"Renovação",
+  sit:"Um político tem mandato desde 2003: <b>16 anos</b> de deputado estadual e, desde 2019, senador. São <b>23 anos seguidos</b> de cargo eletivo.",
+  ask:"O senhor chamaria isso de renovação?",
+  btn:["É renovação","Não é renovação"],
+  nome:"É o Flávio: deputado estadual de 2003 a 2018 e senador desde 2019.",
+  fatos:["Quatro mandatos na Assembleia do Rio e um no Senado."],
+  estado:"Fato público, na ficha oficial da Alerj e do Senado.",
+  lado:"",
+  fontes:[["Perfil no Senado Federal","https://www25.senado.leg.br/web/senadores/senador/-/perfil/5894"]]}
+];
+
+const st = {i:-1, resp:[], shown:false};
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/<b>/g, "||B||").replace(/<\/b>/g, "||/B||").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/\|\|B\|\|/g, "<b>").replace(/\|\|\/B\|\|/g, "</b>");
+
+function ruler(){
+  const done = st.resp.filter(r => r !== undefined).length;
+  $("#cells").innerHTML = CASOS.map((_, k) =>
+    `<span class="${k < done ? "done" : ""} ${k === st.i ? "now" : ""}">${k + 1}</span>`).join("");
+  $("#ruler").setAttribute("aria-valuenow", done);
+  $("#rlabel").textContent = st.i < 0 ? "A régua · 8 casos" : st.i >= CASOS.length ? "Régua completa" : `Caso ${st.i + 1} de 8 · ${CASOS[st.i].valor}`;
+}
+
+function capa(){
+  $("#screen").innerHTML = `<div class="card">
+    <span class="eyebrow">O teste da régua</span>
+    <h1>Antes de domingo, o teste que todo brasileiro patriota devia fazer.</h1>
+    <p>Oito situações reais, todas com data e fonte, sobre um dos candidatos do 2º turno. Você julga o ato primeiro, pela sua régua. Só depois vê quem foi.</p>
+    <p class="soft">Não tem pegadinha e ninguém vê a sua resposta. Mudar de ideia com fato na mão é coisa de gente séria.</p>
+    <button class="primary" id="go">Começar</button>
+  </div>`;
+  $("#go").onclick = () => { 
+    document.getElementById('bg-audio').play().catch(() => {});
+    st.i = 0; st.shown = false; render(); 
+  };
+}
+
+function caso(){
+  const c = CASOS[st.i], r = st.resp[st.i];
+  const labels = c.btn || ["Acho certo","Acho errado"];
+  let h = `<div class="card">
+    <span class="eyebrow">${st.i + 1} · ${esc(c.valor)}</span>
+    ${c.pre ? `<p class="soft">${esc(c.pre)}</p>` : ""}
+    <p class="situacao">${esc(c.sit)}</p>
+    <p class="ask">${esc(c.ask)}</p>`;
+  if (!st.shown){
+    h += `<div class="btns"><button id="b0">${labels[0]}</button><button id="b1">${labels[1]}</button></div>
+      <button class="linkbtn" id="skip">Prefiro não responder</button>`;
+  } else {
+    const v = r === 1 ? `<span class="verdict errado">Você: ${labels[1].toLowerCase()}</span>` : r === 0 ? `<span class="verdict certo">Você: ${labels[0].toLowerCase()}</span>` : "";
+    h += `<div class="reveal stack">${v}
+      <h2>${esc(c.nome)}</h2>
+      <ul class="fatos">${c.fatos.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
+      <div class="box"><b>Situação</b><p>${esc(c.estado)}</p></div>
+      ${c.lado ? `<div class="lado"><b class="small">O que ele diz:</b> ${esc(c.lado)}</div>` : ""}
+      <div class="box fontes"><b>Fonte</b>${c.fontes.map(([t,u]) => u ? `<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>` : `<span>${esc(t)}</span>`).join("")}</div>
+      <button class="primary" id="next">${st.i < CASOS.length - 1 ? "Próximo caso" : "Ver a minha régua"}</button>
+    </div>`;
+  }
+  $("#screen").innerHTML = h + `</div>`;
+  if (!st.shown){
+    const pick = v => { st.resp[st.i] = v; st.shown = true; render(); };
+    $("#b0").onclick = () => pick(0); $("#b1").onclick = () => pick(1); $("#skip").onclick = () => pick(null);
+  } else {
+    $("#next").onclick = () => { st.i++; st.shown = false; render(); window.scrollTo(0,0); };
+  }
+}
+
+function resultado(){
+  const resp = st.resp.filter(r => r === 0 || r === 1);
+  const err = resp.filter(r => r === 1).length;
+  
+  // Envia o registro de conclusão para o banco de dados
+  window.registrarEvento("conclusao", err);
+  
+  const txt = "Fiz o teste da régua antes de domingo. São 8 casos com fonte. Responde e me diz se a sua deu igual à minha: " + (SHARE_URL || location.href.split("#")[0]);
+  $("#screen").innerHTML = `<div class="card">
+    <span class="eyebrow">A sua régua</span>
+    <div><span class="placar">${err}</span> <span class="soft">de ${resp.length} casos você achou errado</span></div>
+    <p>A régua que você usou aqui é a mesma que você usa com o vizinho, com o funcionário, com o próprio filho. Ela vale para todo mundo.</p>
+    
+    <p class="honra">ANULAR voto também é ter hombridade.</p>
+    <p class="honra" style="font-size: 20px;">Mudar a régua que mede cada um, não.</p>
+    
+    <div class="box"><b>Antes de domingo</b>
+      <p>1. Abra as fontes de cada caso e confira com os seus olhos.</p>
+      <p>2. Se a sua régua disser que não dá, você não precisa votar em quem não confia. Na urna, digite 00 e aperte Confirma.</p>
+    </div>
+    <p class="soft"><i>“Quem é fiel no pouco também é fiel no muito.”</i><br>Fonte: Bíblia Cristã</p>
+    <div class="sharebox">
+      <a href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">Mandar para alguém de confiança</a>
+      <button id="copy">Copiar o texto e o link</button>
+      <button class="linkbtn" id="again">Refazer o teste</button>
+    </div>
+  </div>`;
+  $("#copy").onclick = async e => {
+    try { await navigator.clipboard.writeText(txt); e.target.textContent = "Copiado"; }
+    catch { e.target.textContent = txt; }
+  };
+  $("#again").onclick = () => { st.i = -1; st.resp = []; st.shown = false; render(); };
+}
+
+function render(){
+  ruler();
+  if (st.i < 0) capa(); else if (st.i >= CASOS.length) resultado(); else caso();
+}
+render();
+</script>
+</body>
+</html>
