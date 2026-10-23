@@ -184,7 +184,7 @@ const CASOS = [
   lado:"Ele diz que foi tudo legal.",
   fontes:[["Jornal do Brasil, 2/10/2026","https://www.jb.com.br/brasil/policia/2026/10/1061098-pf-investiga-financiamento-de-mansao-de-flavio-bolsonaro-em-brasilia.html"],["Banco Central, financiamento de veículos PF","https://www.creditas.com/exponencial/taxa-de-juros-financiamento-de-veiculo/"]]},
  {valor:"Mérito",
-  pre:[{q:"Lembra do seu primeiro emprego? Com quantos anos você começou?",ops:["Antes dos 16","De 16 a 18","Com 19 ou mais"]},{q:"E quanto tempo de condução até lá?",ops:["Menos de 30 min","De 30 min a 1 hora","Mais de 1 hora"]},{q:"Quantas horas por dia você trabalhava?",ops:["Até 6 horas","8 horas","Mais de 8 horas"]}],
+  pre:[{q:"O(a) senhor(a) lembra do seu primeiro emprego? Com quantos anos começou?",ops:["Antes dos 16","De 16 a 18","Com 19 ou mais"]},{q:"E quanto tempo de condução até lá?",ops:["Menos de 30 min","De 30 min a 1 hora","Mais de 1 hora"]},{q:"Quantas horas por dia o(a) senhor(a) trabalhava?",ops:["Até 6 horas","8 horas","Mais de 8 horas"]}],
   sit:"Aos 19 anos, um rapaz do Rio ganhou um cargo de <b>40 horas por semana</b> na Câmara dos Deputados, em Brasília, de 2000 a 2002. No mesmo período ele cursava Direito e fazia estágio no Rio, a <b>mil quilômetros</b> de distância.",
   ask:"O senhor acha certo um cargo assim, pago com imposto?",
   nome:"Foi o Flávio, aos 19 anos, na liderança do PPB na Câmara.",
@@ -252,7 +252,7 @@ function capa(){
   $("#screen").innerHTML = `<div class="card">
     <span class="eyebrow">O teste da régua</span>
     <h1>Antes de domingo, o teste que todo brasileiro patriota e com valores de cristão devia fazer!</h1>
-    <p>Sete situações reais, todas com data e fonte, sobre um dos candidatos do 2º turno. Você julga cada ato pela sua régua. No fim, vê quem foi, com todas as fontes.</p>
+    <p>Sete situações reais, todas com data e fonte, sobre um dos candidatos do 2º turno. O(a) senhor(a) julga cada ato pela sua régua. No fim, vê quem foi, com todas as fontes.</p>
     <p class="soft">Não tem pegadinha e ninguém vê a sua resposta. Mudar de ideia com fato na mão é coisa de gente séria.</p>
     <button class="primary" id="go">Começar</button>
   </div>`;
@@ -278,7 +278,7 @@ function caso(){
   const F = {"Antes dos 16":"antes dos 16 anos","De 16 a 18":"entre 16 e 18 anos","Com 19 ou mais":"com 19 anos ou mais",
     "Menos de 30 min":"menos de 30 minutos","De 30 min a 1 hora":"de 30 minutos a 1 hora","Mais de 1 hora":"mais de 1 hora",
     "Até 6 horas":"até 6 horas","8 horas":"8 horas","Mais de 8 horas":"mais de 8 horas"};
-  const recap = c.pre ? `<div class="recap"><b>O seu começo</b><p>Você começou a trabalhar ${F[st.pre[0]]}, levava ${F[st.pre[1]]} de condução e trabalhava ${F[st.pre[2]]} por dia.</p></div><p class="soft">Agora compare com este começo:</p>` : "";
+  const recap = c.pre ? `<div class="recap"><b>O seu começo</b><p>O(a) senhor(a) começou a trabalhar ${F[st.pre[0]]}, levava ${F[st.pre[1]]} de condução e trabalhava ${F[st.pre[2]]} por dia.</p></div><p class="soft">Agora compare com este começo:</p>` : "";
   $("#screen").innerHTML = `<div class="card">
     <span class="eyebrow">${st.i + 1} · ${esc(c.valor)}</span>
     ${recap}
@@ -304,8 +304,8 @@ function revelaHtml(c){
 
 function chip(k){
   const c = CASOS[k], labels = c.btn || ["Acho certo","Acho errado"], r = st.resp[k];
-  return r === 1 ? `<span class="verdict errado">Você: ${labels[1].toLowerCase()}</span>`
-       : r === 0 ? `<span class="verdict certo">Você: ${labels[0].toLowerCase()}</span>`
+  return r === 1 ? `<span class="verdict errado">O(a) senhor(a): ${labels[1].toLowerCase()}</span>`
+       : r === 0 ? `<span class="verdict certo">O(a) senhor(a): ${labels[0].toLowerCase()}</span>`
        : `<span class="verdict">Sem resposta</span>`;
 }
 
@@ -321,14 +321,14 @@ function finalPages(){
   const resp = st.resp.filter(r => r === 0 || r === 1);
   const err = resp.filter(r => r === 1).length;
   const N = CASOS.length;
-  const msg = err >= 5 ? "A sua régua é firme. Você mediu cada ato sem olhar o nome."
-            : err >= 3 ? "Você pesou caso por caso, pela sua cabeça."
-            : "Você achou certo a maior parte, e tem esse direito.";
+  const msg = err >= 5 ? "A sua régua é firme. O(a) senhor(a) mediu cada ato sem olhar o nome."
+            : err >= 3 ? "O(a) senhor(a) pesou caso por caso, pela sua cabeça."
+            : "O(a) senhor(a) achou certo a maior parte, e tem esse direito.";
   const pages = [];
   pages.push(`<div class="card center">
     <span class="eyebrow">A sua régua</span>
     <div class="placar">${err}<span>/${resp.length}</span></div>
-    <p class="lead">casos que você achou errado</p>
+    <p class="lead">casos que o(a) senhor(a) achou errado</p>
     <p>${msg}</p>
     <p class="soft">Antes de ver quem foi: mudar de ideia com fato na mão é coisa de gente séria.</p>
     ${nav(false, "Ver quem foi")}
@@ -343,14 +343,14 @@ function finalPages(){
   </div>`);
   pages.push(`<div class="card tint">
     <span class="eyebrow">A régua é a mesma</span>
-    <p class="lead">A régua que você usou aqui é a mesma que você usa com o vizinho, com o funcionário, com o próprio filho.</p>
+    <p class="lead">A régua que o(a) senhor(a) usou aqui é a mesma que usa com o vizinho, com o funcionário, com o próprio filho.</p>
     <blockquote class="verso">“Quem é fiel no pouco também é fiel no muito.”<span>Lucas 16,10</span></blockquote>
     ${nav(true, "Continuar")}
   </div>`);
   pages.push(`<div class="card">
     <span class="eyebrow">Antes de domingo</span>
     <div class="passo"><i>1</i><p>Abra as fontes de cada caso e confira com os seus olhos.</p></div>
-    <div class="passo forte"><i>2</i><p>Se a sua régua disser que não dá, você não precisa votar em quem não confia.</p></div>
+    <div class="passo forte"><i>2</i><p>Se a sua régua disser que não dá, o(a) senhor(a) não precisa votar em quem não confia.</p></div>
     <div class="urna" aria-label="Na urna: digite 0 0 e aperte Confirma">
       <span class="tecla">0</span><span class="tecla">0</span><span class="tecla confirma">CONFIRMA</span>
     </div>
@@ -359,7 +359,7 @@ function finalPages(){
   </div>`);
   pages.push(`<div class="card">
     <span class="eyebrow">Compartilhar</span>
-    <p class="lead">Mande para alguém de confiança e veja se a régua de vocês dá igual.</p>
+    <p class="lead">Mande para alguém de confiança e veja se as duas réguas dão igual.</p>
     <div class="sharebox">
       <a id="wa" href="#" target="_blank" rel="noopener">Mandar pelo WhatsApp</a>
       <button id="copy">Copiar o texto e o link</button>
@@ -421,7 +421,7 @@ function resultado(){
   if (!st.logged){ window.registrarEvento("conclusao", err); st.logged = true; }
   st.f = Math.max(0, Math.min(st.f || 0, pages.length - 1));
   $("#screen").innerHTML = pages[st.f];
-  const txt = "Fiz o teste da régua antes de domingo. São 7 casos com fonte. Responde e me diz se a sua deu igual à minha: " + (SHARE_URL || location.href.split("#")[0]);
+  const txt = "Fiz o teste da régua antes de domingo. São 7 casos com fonte. Responda e me diga se a sua deu igual à minha: " + (SHARE_URL || location.href.split("#")[0]);
   const wa = $("#wa"); if (wa){ wa.href = "https://wa.me/?text=" + encodeURIComponent(txt); wa.onclick = () => window.ev("compartilhar_whatsapp"); }
   const cp = $("#copy"); if (cp) cp.onclick = async e => {
     window.ev("copiar_link");
