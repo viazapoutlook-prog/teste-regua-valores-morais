@@ -96,13 +96,14 @@ blockquote.verso{margin:0;border-left:3px solid var(--gold);padding:8px 12px;fon
 .urna{display:flex;gap:10px;justify-content:center;padding:6px 0}.tecla{min-width:56px;padding:14px 12px;border-radius:6px;background:#1d1d1d;color:#fff;font:700 24px/1 var(--display);text-align:center;box-shadow:inset 0 -3px 0 rgba(0,0,0,.4)}.tecla.confirma{background:#1f8f3a;font-size:20px;padding:16px 14px}
 .center-t{text-align:center}
 .mais{border:0;border-radius:10px;padding:14px}
+.som{padding:0;font-size:13px}
 footer{font-size:13px;color:var(--soft);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
 @media (prefers-reduced-motion:no-preference){.card{animation:in .25s ease-out}@keyframes in{from{transform:translateY(6px)}to{transform:none}}}
 </style>
 </head>
 <body>
 <main>
-  <audio id="bg-audio" loop>
+  <audio id="bg-audio">
     <source src="WhatsApp Ptt 2026-10-23 at 12.56.33.ogg" type="audio/ogg">
   </audio>
 
@@ -110,7 +111,7 @@ footer{font-size:13px;color:var(--soft);border-top:1px solid var(--line);padding
     <div class="ruler" role="progressbar" aria-valuemin="0" aria-valuemax="8" id="ruler" aria-valuenow="0">
       <div class="ruler-cells" id="cells"></div>
     </div>
-    <div class="ruler-label"><span id="rlabel">A régua · 7 casos</span><span>2º turno · 25/10/2026</span></div>
+    <div class="ruler-label"><span id="rlabel">A régua · 7 casos</span><button class="linkbtn som" id="som" aria-pressed="true">Som ligado</button></div>
   </div>
 
   <section id="screen"></section>
@@ -251,7 +252,6 @@ function capa(){
     <button class="primary" id="go">Começar</button>
   </div>`;
   $("#go").onclick = () => { 
-    document.getElementById('bg-audio').play().catch(() => {});
     st.i = 0; st.f = 0; render(); 
   };
 }
@@ -397,7 +397,7 @@ function bonus(){
       ${c.lado ? `<div class="lado"><b>O que ele diz</b><p>${esc(c.lado)}</p></div>` : ""}
       <div class="fontes"><b>Fonte</b>${fontesHtml(c)}</div>
       <div class="nav"><button id="prev">Voltar</button><button class="primary" id="again">Refazer o teste</button></div>`;
-    wire();
+    wire(); tocar();
   };
   $("#x0").onclick = show; $("#x1").onclick = show;
 }
@@ -424,12 +424,48 @@ function resultado(){
   };
   if ($("#bonus")) bonus();
   wire();
+  tocar();
+}
+
+
+// --- ÁUDIO: hino na abertura e no caso 1; narração gravada por pessoa real nas telas seguintes ---
+const FINAL_KEYS = ["placar","revelacao","regua","domingo","compartilhar"];
+const narra = new Audio();
+let somOn = true, keyAtual = null;
+function chaveAudio(){
+  if (st.i < 0) return null;
+  if (st.i === 0) return "hino";
+  if (st.i < CASOS.length){
+    const c = CASOS[st.i];
+    if (c.pre && st.pre.length < c.pre.length) return `caso${st.i + 1}-${"abc"[st.pre.length]}`;
+    return `caso${st.i + 1}`;
+  }
+  if ($("#bonus")) return $("#bonus h2") ? "bonus-revelado" : "bonus";
+  if (st.f < FINAL_KEYS.length) return FINAL_KEYS[st.f];
+  return `detalhe${st.f - FINAL_KEYS.length + 1}`;
+}
+function tocar(){
+  const k = chaveAudio(), hino = document.getElementById("bg-audio");
+  if (k === keyAtual) return;
+  keyAtual = k;
+  narra.pause();
+  if (k !== "hino") hino.pause();
+  if (!somOn || !k) return;
+  if (k === "hino"){ hino.play().catch(() => {}); return; }
+  const tenta = ext => { narra.src = `narracao/${k}.${ext}`; narra.play().catch(() => {}); };
+  narra.onerror = () => { if (narra.src.endsWith(".mp3")) tenta("ogg"); };
+  tenta("mp3");
 }
 
 function render(){
   ruler();
   if (st.i < 0) capa(); else if (st.i >= CASOS.length) resultado(); else caso();
+  tocar();
 }
+$("#som").onclick = () => {
+  somOn = !somOn; $("#som").textContent = somOn ? "Som ligado" : "Som desligado"; $("#som").setAttribute("aria-pressed", somOn);
+  keyAtual = null; if (!somOn){ narra.pause(); document.getElementById("bg-audio").pause(); } else tocar();
+};
 render();
 </script>
 </body>
