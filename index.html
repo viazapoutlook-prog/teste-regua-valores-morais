@@ -146,11 +146,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let analytics = null;
 try { analytics = getAnalytics(app); } catch (e) {}
-const medir = (nome, dados) => { try { if (analytics) logEvent(analytics, nome, dados); } catch (e) {} };
-window.medir = medir;
+window.ev = (nome, params = {}) => { try { if (analytics) logEvent(analytics, nome, params); } catch (e) {} };
 
 window.registrarEvento = async (tipo, erros = null) => {
-  medir(tipo === "inicio" ? "teste_inicio" : "teste_conclusao", erros === null ? {} : { erros });
+  window.ev(tipo === "inicio" ? "teste_inicio" : "teste_conclusao", erros === null ? {} : { erros_placar: erros });
   try {
     await addDoc(collection(db, "acessos_regua"), {
       tipo_evento: tipo,
@@ -288,7 +287,7 @@ function caso(){
     <div class="btns"><button id="b0">${labels[0]}</button><button id="b1">${labels[1]}</button></div>
     <button class="linkbtn" id="skip">Prefiro não responder</button>
   </div>`;
-  const pick = v => { st.resp[st.i] = v; st.i++; render(); window.scrollTo(0,0); };
+  const pick = v => { window.ev("caso_respondido", { caso: st.i + 1, resposta: v === null ? "nao_respondeu" : labels[v] }); st.resp[st.i] = v; st.i++; render(); window.scrollTo(0,0); };
   $("#b0").onclick = () => pick(0); $("#b1").onclick = () => pick(1); $("#skip").onclick = () => pick(null);
 }
 
@@ -423,8 +422,9 @@ function resultado(){
   st.f = Math.max(0, Math.min(st.f || 0, pages.length - 1));
   $("#screen").innerHTML = pages[st.f];
   const txt = "Fiz o teste da régua antes de domingo. São 7 casos com fonte. Responde e me diz se a sua deu igual à minha: " + (SHARE_URL || location.href.split("#")[0]);
-  const wa = $("#wa"); if (wa) wa.href = "https://wa.me/?text=" + encodeURIComponent(txt);
+  const wa = $("#wa"); if (wa){ wa.href = "https://wa.me/?text=" + encodeURIComponent(txt); wa.onclick = () => window.ev("compartilhar_whatsapp"); }
   const cp = $("#copy"); if (cp) cp.onclick = async e => {
+    window.ev("copiar_link");
     try { await navigator.clipboard.writeText(txt); e.target.textContent = "Copiado"; }
     catch { e.target.textContent = txt; }
   };
@@ -438,7 +438,7 @@ function resultado(){
 const FINAL_KEYS = ["placar","revelacao","regua","domingo","compartilhar"];
 const narra = new Audio();
 narra.defaultPlaybackRate = 1.5; narra.preservesPitch = true;
-let somOn = true, keyAtual = null;
+let somOn = true, keyAtual = null, keyMedida = null;
 function chaveAudio(){
   if (st.i < 0) return null;
   if (st.i === 0) return "hino";
@@ -455,7 +455,11 @@ function tocar(){
   const k = chaveAudio(), hino = document.getElementById("bg-audio");
   if (k === keyAtual) return;
   keyAtual = k;
-  if (k) window.medir?.("tela", { tela: k });
+  if (k === keyMedida) {}
+  else if (k === "bonus") window.ev("bonus_aberto");
+  else if (k && k.startsWith("detalhe")) window.ev("detalhe_aberto", { caso: +k.slice(7) });
+  else if (FINAL_KEYS.includes(k)) window.ev("final_tela", { tela: k });
+  keyMedida = k;
   narra.pause();
   if (k !== "hino") hino.pause();
   if (!somOn || !k) return;
@@ -471,7 +475,7 @@ function render(){
   tocar();
 }
 $("#som").onclick = () => {
-  somOn = !somOn; $("#som").textContent = somOn ? "Som ligado" : "Som desligado"; $("#som").setAttribute("aria-pressed", somOn);
+  somOn = !somOn; window.ev("som_alternado", { ligado: somOn }); $("#som").textContent = somOn ? "Som ligado" : "Som desligado"; $("#som").setAttribute("aria-pressed", somOn);
   keyAtual = null; if (!somOn){ narra.pause(); document.getElementById("bg-audio").pause(); } else tocar();
 };
 render();
