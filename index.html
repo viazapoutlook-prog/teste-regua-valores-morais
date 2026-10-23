@@ -270,7 +270,10 @@ function caso(){
     q.ops.forEach((o, j) => { $("#o" + j).onclick = () => { st.pre.push(o); render(); }; });
     return;
   }
-  const recap = c.pre ? `<div class="recap"><b>A sua régua</b><p>Começou: ${esc(st.pre[0].toLowerCase())} · condução: ${esc(st.pre[1].toLowerCase())} · ${esc(st.pre[2].toLowerCase())} por dia.</p></div>` : "";
+  const F = {"Antes dos 16":"antes dos 16 anos","De 16 a 18":"entre 16 e 18 anos","Com 19 ou mais":"com 19 anos ou mais",
+    "Menos de 30 min":"menos de 30 minutos","De 30 min a 1 hora":"de 30 minutos a 1 hora","Mais de 1 hora":"mais de 1 hora",
+    "Até 6 horas":"até 6 horas","8 horas":"8 horas","Mais de 8 horas":"mais de 8 horas"};
+  const recap = c.pre ? `<div class="recap"><b>O seu começo</b><p>Você começou a trabalhar ${F[st.pre[0]]}, levava ${F[st.pre[1]]} de condução e trabalhava ${F[st.pre[2]]} por dia.</p></div><p class="soft">Agora compare com este começo:</p>` : "";
   $("#screen").innerHTML = `<div class="card">
     <span class="eyebrow">${st.i + 1} · ${esc(c.valor)}</span>
     ${recap}
