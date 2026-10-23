@@ -431,6 +431,7 @@ function resultado(){
 // --- ÁUDIO: hino na abertura e no caso 1; narração gravada por pessoa real nas telas seguintes ---
 const FINAL_KEYS = ["placar","revelacao","regua","domingo","compartilhar"];
 const narra = new Audio();
+narra.defaultPlaybackRate = 1.25; narra.preservesPitch = true;
 let somOn = true, keyAtual = null;
 function chaveAudio(){
   if (st.i < 0) return null;
@@ -452,7 +453,7 @@ function tocar(){
   if (k !== "hino") hino.pause();
   if (!somOn || !k) return;
   if (k === "hino"){ hino.play().catch(() => {}); return; }
-  const tenta = ext => { narra.src = `narracao/${k}.${ext}`; narra.play().catch(() => {}); };
+  const tenta = ext => { narra.src = `narracao/${k}.${ext}`; narra.playbackRate = 1.25; narra.play().catch(() => {}); };
   narra.onerror = () => { if (narra.src.endsWith(".mp3")) tenta("ogg"); };
   tenta("mp3");
 }
