@@ -130,6 +130,7 @@ footer{font-size:13px;color:var(--soft);border-top:1px solid var(--line);padding
 // --- INÍCIO DO FIREBASE ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBievsXwREUt_tvuIrLfubM0txGFl2FVfQ",
@@ -143,8 +144,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+let analytics = null;
+try { analytics = getAnalytics(app); } catch (e) {}
+const medir = (nome, dados) => { try { if (analytics) logEvent(analytics, nome, dados); } catch (e) {} };
+window.medir = medir;
 
 window.registrarEvento = async (tipo, erros = null) => {
+  medir(tipo === "inicio" ? "teste_inicio" : "teste_conclusao", erros === null ? {} : { erros });
   try {
     await addDoc(collection(db, "acessos_regua"), {
       tipo_evento: tipo,
@@ -449,6 +455,7 @@ function tocar(){
   const k = chaveAudio(), hino = document.getElementById("bg-audio");
   if (k === keyAtual) return;
   keyAtual = k;
+  if (k) window.medir?.("tela", { tela: k });
   narra.pause();
   if (k !== "hino") hino.pause();
   if (!somOn || !k) return;
