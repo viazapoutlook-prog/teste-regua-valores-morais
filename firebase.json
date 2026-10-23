@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "teste-valores-morais",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      ".git/**",
+      ".vscode/**"
+    ]
+  }
+}
